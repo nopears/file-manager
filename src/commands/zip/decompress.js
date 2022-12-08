@@ -5,13 +5,10 @@ import {basename, sep} from 'node:path'
 
 export const decompress = async (path, destinationPath) => {
   try {
-    const rs = createReadStream(path)
-    const ws = createWriteStream(destinationPath + sep + basename(path).slice(0,-3))
-    const brotli = createBrotliDecompress()
-    pipeline(
-      rs,
-      brotli,
-      ws
+    await pipeline(
+      createReadStream(path),
+      createBrotliDecompress(),
+      createWriteStream(destinationPath + sep + basename(path).slice(0,-3))
     )
   } catch {
     console.log('Operation failed')
@@ -19,4 +16,4 @@ export const decompress = async (path, destinationPath) => {
 
 };
 
-await decompress();
+await decompress()

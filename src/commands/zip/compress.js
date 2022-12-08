@@ -5,13 +5,10 @@ import {basename, sep} from 'node:path'
 
 export const compress = async (path, destinationPath) => {
   try {
-    const rs = createReadStream(path)
-    const ws = createWriteStream(destinationPath + sep + basename(path) + '.br')
-    const brotli = createBrotliCompress()
-    pipeline(
-      rs,
-      brotli,
-      ws
+    await pipeline(
+      createReadStream(path),
+      createBrotliCompress(),
+      createWriteStream(destinationPath + sep + basename(path) + '.br')
     )
   } catch {
     console.log('Operation failed')
@@ -19,4 +16,4 @@ export const compress = async (path, destinationPath) => {
 
 };
 
-await compress();
+await compress()
